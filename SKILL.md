@@ -32,6 +32,15 @@ For important items, do not stop at summarizing facts. Prefer structured judgmen
 - 影响路径是什么？会传导到哪些下游能力？
 - 时间尺度是什么？短期显著、中期转折、还是长期基座变化？
 
+## Novelty and follow-up rule
+Before drafting, compare against the previous 2 reports in `outputDir` when available.
+- If an item already appeared yesterday or the day before, do **not** repeat the same summary as a top item unless there is a concrete new information increment.
+- For repeated stories, either:
+  1. dig deeper and report only the new increment (`今日新增：...`), or
+  2. demote it to `追踪中` with a clear note that there is no material update.
+- Prefer fresh angles from primary sources, benchmark updates, API availability, pricing/deployment details, third-party evaluation, real user feedback, governance changes, or ecosystem reactions.
+- A good daily report should answer: “What do I know today that I did not know yesterday?”
+
 When a new model launches, try to explain:
 - relative position vs incumbent models
 - what it is actually better at
