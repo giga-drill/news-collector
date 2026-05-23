@@ -1,12 +1,93 @@
 # news-collector
 
-`news-collector` is a Codex skill for producing a judgment-oriented AI daily briefing. It is designed for readers who care less about seeing every AI headline and more about understanding which model, agent, and workflow changes actually matter.
+`news-collector` is a Codex skill for producing a judgment-oriented AI daily briefing. It helps you answer:
 
-The skill currently focuses on Chinese AI reports for an AI engineer / workflow-oriented reader, but the long-term shape is a personalizable briefing engine: sources, ranking rules, editorial rubric, style examples, and output surfaces can be adapted for different readers.
+- 今天 AI 领域真正值得关注的变化是什么？
+- 哪些只是 PR、合作、包装或重复新闻？
+- 模型、agent、开发工具和工作流之间的变化会怎么传导？
+- 如果我只想花几分钟看 AI 新闻，应该先看哪几件事？
+
+The skill currently focuses on Chinese AI reports for an AI engineer / workflow-oriented reader. It is not meant to be a generic AI news scraper; it behaves more like a research editor that reads many sources, filters noise, and writes a compact briefing with evidence, comparison, and judgment.
+
+## Quick Use
+
+Once this repo is installed as a Codex skill, ask Codex something like:
+
+```text
+用 news-collector 生成今天的 AI 日报。
+```
+
+or:
+
+```text
+跑一下今天的 AI 新闻简报，重点看模型、agent、coding workflow，有不确定的新闻放到追踪中。
+```
+
+The skill will:
+
+1. Read the configured output directory from `references/config.json`.
+2. Collect recent AI items from `references/sources.md`.
+3. Prefer high-signal primary sources, research, developer tools, and ecosystem reactions.
+4. Compare against recent reports when available, so repeated stories are not promoted without a real new increment.
+5. Write the final report to the configured output directory.
+
+Current default output directory:
+
+```text
+/Users/mac/AI progresses
+```
+
+## Example Output
+
+The report is intentionally structured around judgment, not a flat list of links:
+
+```md
+## 📰 AI日报 — 2026-05-22
+
+### 🔥 最高优先级（最值得关注）
+- [Google AI Blog] Google I/O 2026 把 Gemini 3.5 Flash、Antigravity、Managed Agents 串成 agent 平台路线
+  层级：模型层 / Agent层
+  今日新增：Google 不只是发布更快的 Gemini 3.5 Flash，而是把模型、桌面 agent 应用、Gemini API 托管 agent 放在同一条开发者路线里。
+  判断：这件事重要的地方在于，Google 正在把模型能力的叙事从“回答质量”推到“可执行工作流”。
+  对比：相比过去 Gemini 主要作为模型/API 能力展示，这次更接近 OpenAI/Codex、Cursor、Claude Code 那条路线。
+  影响：短期影响会落在开发者工具和企业自动化；中期会影响 agent runtime 和托管执行层。
+
+### 📚 重要动态
+- [JetBrains AI Blog] AI 代码错误不应都流入人工 review，IDE 应先拦一层
+
+### ⏭️ 追踪中
+- DeepWeb-Bench / AutoRPA 仍需要更稳定的 research-source recall。
+```
+
+## Running The Inspectable Pipeline
+
+The skill can also run an inspectable end-to-end pipeline for debugging. This is useful when you want to see raw fetched pages, intermediate candidates, score breakdowns, editor input, Markdown, and HTML.
+
+From the repo root:
+
+```bash
+node scripts/run-real-e2e.mjs --limit 20
+```
+
+This writes a timestamped run under the configured `outputDir`.
+
+Prepare the editor input for an LLM/editor pass:
+
+```bash
+node scripts/prepare-editor-pass.mjs "/path/to/debug-runs/<run-id>"
+```
+
+Render any digest JSON or Markdown file to standalone HTML:
+
+```bash
+node scripts/render-digest-html.mjs "/path/to/digest.json" "/path/to/digest.html"
+```
+
+The generated HTML is self-contained: CSS is inline and no external assets are required.
 
 ## What It Produces
 
-The final briefing is structured around editorial judgment, not a flat news list:
+The final briefing uses these sections:
 
 - **最高优先级**: the few items most worth attention today.
 - **重要动态**: meaningful updates that should stay on the radar.
@@ -20,7 +101,7 @@ For important items, the skill prefers these fields:
 - `对比`: how it differs from existing approaches or adjacent products.
 - `影响`: where the change may propagate downstream.
 
-## Product Shape
+## Why This Shape
 
 For maximum spread, the skill should not be exposed only as a local skill. The skill is the production engine; the shareable surfaces should be:
 
@@ -79,15 +160,7 @@ The inspectable pipeline is split into four conceptual stages:
 
 The key design principle is that crawler scores are only recall/debug signals. Final ranking and prose quality should come from the editor stage.
 
-## Running A Real Debug Pass
-
-From the repo root:
-
-```bash
-node scripts/run-real-e2e.mjs --limit 20
-```
-
-This writes a timestamped run under the configured `outputDir`, currently set in `references/config.json`.
+## Real Debug Pass Artifacts
 
 Typical run artifacts:
 
@@ -108,30 +181,7 @@ debug-runs/<run-id>/
 └── digest.html
 ```
 
-## Preparing The Editor Pass
-
-After a real run:
-
-```bash
-node scripts/prepare-editor-pass.mjs "/path/to/debug-runs/<run-id>"
-```
-
-This produces:
-
-- `state/editor-input.json`
-- `state/editor-prompt.md`
-
-The intended next step is to pass `editor-prompt.md` to an LLM/editor stage and save the result as a structured `digest.json`.
-
-## Rendering HTML
-
-Render any digest JSON or Markdown file to standalone HTML:
-
-```bash
-node scripts/render-digest-html.mjs "/path/to/digest.json" "/path/to/digest.html"
-```
-
-The generated HTML is self-contained: CSS is inline and no external assets are required.
+The intended next step after `prepare-editor-pass.mjs` is to pass `state/editor-prompt.md` to an LLM/editor stage and save the result as a structured `digest.json`.
 
 ## Customization Model
 
