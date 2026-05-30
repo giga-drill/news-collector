@@ -20,7 +20,7 @@ Once this repo is installed as a Codex skill, ask Codex something like:
 or:
 
 ```text
-跑一下今天的 AI 新闻简报，重点看模型、agent、coding workflow，有不确定的新闻放到追踪中。
+跑一下今天的 AI 新闻简报，重点看模型、agent、coding workflow，只保留最重要的 6-8 条。
 ```
 
 The skill will:
@@ -54,9 +54,6 @@ The report is intentionally structured around judgment, not a flat list of links
 
 ### 📚 重要动态
 - [JetBrains AI Blog] AI 代码错误不应都流入人工 review，IDE 应先拦一层
-
-### ⏭️ 追踪中
-- DeepWeb-Bench / AutoRPA 仍需要更稳定的 research-source recall。
 ```
 
 ## Running The Inspectable Pipeline
@@ -99,11 +96,17 @@ The generated HTML is self-contained: CSS is inline and no external assets are r
 
 ## What It Produces
 
-The final briefing uses these sections:
+The normal daily briefing uses two priority-ranked sections:
 
 - **最高优先级**: the few items most worth attention today.
 - **重要动态**: meaningful updates that should stay on the radar.
-- **追踪中**: uncertain, incomplete, repeated, or still-developing signals.
+
+Default length:
+
+- **最高优先级**: 2-3 items.
+- **重要动态**: 3-5 items.
+
+Items that are uncertain, repeated, stale, or low-priority should usually be omitted rather than placed in a tail section.
 
 For important items, the skill prefers these fields:
 

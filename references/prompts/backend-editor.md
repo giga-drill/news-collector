@@ -53,11 +53,6 @@ Return a single JSON object matching this shape:
       "id": "important",
       "heading": "📚 重要动态",
       "items": []
-    },
-    {
-      "id": "tracking",
-      "heading": "⏭️ 追踪中",
-      "items": []
     }
   ],
   "meta": {
@@ -78,12 +73,20 @@ Return a single JSON object matching this shape:
 - Prefer primary sources, official changelogs, papers, benchmark pages, and firsthand engineering reports.
 - Community/media items can be discovery signals, but do not treat them as final proof unless the linked original source is strong.
 - Every `top` item should have a concrete `today_delta`.
-- If raw evidence is thin, either demote to `tracking` or say the uncertainty explicitly.
+- If raw evidence is thin, usually omit the item. If it is still necessary to mention, say the uncertainty explicitly in `important`.
 - Make the final digest compact enough for HTML cards.
-- Preserve the original skill's shape: usually 3 top items, 6-8 important items, and a `追踪中` section that names uncertainty and what to watch next.
+- Default report size: 2-3 `top` items and 3-5 `important` items. The normal report should not include a third `tracking` section.
+- Omit lower-priority, stale, repeated, or uncertain items instead of preserving them in a tail section.
+- Only include an explicit tracking/watch section if the user asks for tracking or if there is an actual persisted tracking state to update.
 - For top items, always answer: layer, core increment, comparison, downstream impact, and time scale.
 - Prefer synthesis across related candidates when that produces a stronger point. For example, several agent-runtime items can become one higher-level story instead of several weak bullets.
-- If the candidate pool seems to miss an important item hinted by sources or previous reports, say so in `tracking` rather than inventing facts.
+- If the candidate pool seems to miss an important item hinted by sources or previous reports, do not invent facts. Mention the recall gap only in `meta` or a debug note, not in the user-facing digest.
+- Optimize every card for skimming in HTML. The reader should understand the point in one pass.
+- `judgment` should explain the headline in plain language before adding interpretation. Use 1-2 short sentences.
+- `comparison` should usually contain one contrast only: old pattern vs new pattern, or this item vs one obvious baseline.
+- `impact` should describe a concrete cause-effect path: who changes behavior, which workflow/tool/cost/risk changes, and why.
+- Avoid dense chains of abstract nouns such as “治理、运行时、企业上下文、可观测性、归因” in one sentence unless each term is necessary.
+- Split long sentences instead of using many commas.
 
 ## Style calibration
 
@@ -95,6 +98,9 @@ The old good reports have these properties:
 - `影响` explains a plausible transmission path into models, agents, workflow, cost, security, governance, or engineering practice.
 - Important items can be one concise paragraph, but top items need richer reasoning.
 - Weak evidence is demoted, not padded.
+- Good `判断` feels like an editor explaining the item to a smart but busy reader.
+- Good `对比` is easy to paraphrase as “before X, now Y”.
+- Good `影响` names the first affected user or workflow.
 
 Bad output patterns:
 
@@ -103,6 +109,9 @@ Bad output patterns:
 - Treating partnership/enterprise press releases as capability progress.
 - Letting broad category pages such as `Developer tools` or `Daily Papers` enter the digest.
 - Losing high-value arXiv/research items because an early fetch/ranking cap was too tight.
+- Long paragraphs that require rereading to understand the core point.
+- `对比` fields that list many products but never say the actual difference.
+- `影响` fields that stay at “会影响生态/工作流” without naming a concrete path.
 
 ## Layer guidance
 
