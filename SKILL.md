@@ -69,11 +69,15 @@ When an agent/tool update lands, explicitly judge whether it is:
 5. Draft the report as `## 📰 AI日报 — {日期}` with clear judgment, not just summaries.
 6. Keep the report short: 2-3 top items and 3-5 important items. Omit lower-priority items instead of creating a third section.
 7. Save the full report to `{outputDir}/{YYYY-MM-DD}.md` using `write`.
-8. Only after confirming the file write succeeded, return/output the report for delivery.
-9. If saving fails, report the save failure clearly and do not pretend delivery succeeded.
+8. Generate the standalone HTML reading view at `{outputDir}/{YYYY-MM-DD}.html`.
+9. Only after confirming the Markdown and HTML writes succeeded, return/output the report for delivery.
+10. Start the final response with the generated HTML file path before the report title.
+11. If saving or rendering fails, report the failure clearly and do not pretend delivery succeeded.
 
 ## Output format
 ```md
+HTML 版：{outputDir}/{YYYY-MM-DD}.html
+
 ## 📰 AI日报 — {日期}
 
 ### 🔥 最高优先级（最值得关注）
@@ -88,7 +92,8 @@ When an agent/tool update lands, explicitly judge whether it is:
 ```
 
 ## Notes
-- Keep the final output to the report body only.
+- Keep the final output to the HTML file path plus report body only.
+- Do not paste raw HTML in the final response.
 - Default to 2-3 items in `最高优先级` and 3-5 items in `重要动态`.
 - Do not include a `追踪中` / tracking section in the normal daily report unless the user explicitly asks for tracking.
 - If an item is uncertain, stale, repeated, or lower priority, usually omit it rather than preserving it in a tail section.
