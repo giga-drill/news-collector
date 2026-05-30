@@ -83,6 +83,18 @@ Render any digest JSON or Markdown file to standalone HTML:
 node scripts/render-digest-html.mjs "/path/to/digest.json" "/path/to/digest.html"
 ```
 
+Convert an existing Markdown report to standalone HTML:
+
+```bash
+node scripts/convert-md-to-html.mjs "/Users/mac/AI progresses/2026-05-22.md"
+```
+
+Convert a folder of old Markdown reports:
+
+```bash
+node scripts/convert-md-to-html.mjs "/Users/mac/AI progresses" --output "/Users/mac/AI progresses/html"
+```
+
 The generated HTML is self-contained: CSS is inline and no external assets are required.
 
 ## What It Produces
@@ -139,6 +151,7 @@ In short: public pages and cards are the传播单位; the skill is the engine.
     ├── run-real-e2e.mjs             # Real fetch -> raw files -> candidates -> debug digest
     ├── run-debug-e2e.mjs            # Small smoke/debug pipeline
     ├── prepare-editor-pass.mjs      # Build editor input from a run directory
+    ├── convert-md-to-html.mjs       # Convert old Markdown reports to standalone HTML
     └── render-digest-html.mjs       # Render digest JSON/Markdown to standalone HTML
 ```
 

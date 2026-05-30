@@ -89,3 +89,18 @@ When an agent/tool update lands, explicitly judge whether it is:
 - Be willing to say an update is mostly packaging rather than substantive progress.
 - When uncertain, downgrade an item rather than overstating it.
 - Prioritize signal useful to AI engineers, coding workflows, and productivity shifts.
+
+## HTML conversion
+When asked to convert an existing Markdown report to a portable HTML file, use:
+
+```bash
+node scripts/convert-md-to-html.mjs "{path-to-report.md}"
+```
+
+For a directory of old reports, use:
+
+```bash
+node scripts/convert-md-to-html.mjs "{reports-dir}" --output "{html-output-dir}"
+```
+
+The generated HTML is a standalone file with inline CSS and no required external assets.
